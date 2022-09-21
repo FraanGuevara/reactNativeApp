@@ -1,92 +1,97 @@
-import { StyleSheet, View, TextInput} from 'react-native';
-import { useState } from 'react';
-import BotonAdd from './components/BotonAdd';
-import TareaDlt from './components/TareaDlt';
+import { StyleSheet, View, TextInput, Text, FlatList } from "react-native";
+import { useState } from "react";
+import BotonAdd from "./components/Botones/BotonAdd";
+import TareaDeleteContainer from "./components/Botones/BotonesContainer/TareaDeleteContainer";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
 
-  inputContainer:{
-    marginTop:50,
-    marginBottom:20,
-    marginHorizontal:20,
-    flexDirection:'row',
-    justifyContent: 'space-between'
+  inputContainer: {
+    marginTop: 50,
+    marginBottom: 20,
+    marginHorizontal: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 
-  input:{
-    width:'75%',
-    color:'#0471A6',
+  input: {
+    width: "75%",
+    color: "#0471A6",
     borderBottomColor: "#0471A6",
     borderBottomWidth: 1,
-    height:45,
-    marginBottom:5,
+    height: 45,
+    marginBottom: 5,
   },
 
   containerTask: {
-    marginBottom:20,
-    marginHorizontal:20,
+    marginBottom: 20,
+    marginHorizontal: 20,
   },
 
   textTask: {
-    backgroundColor:'white',
-    marginTop:0,
-    marginVertical:10,
-    justifyContent:'space-between',
-    width:'100%'
-  }
-
+    backgroundColor: "white",
+    marginTop: 0,
+    marginVertical: 10,
+    justifyContent: "space-between",
+    width: "100%",
+  },
 });
 
-
 export default function App() {
+  const [tarea, setTarea] = useState("");
+  /* const [tareaAgregada, setTareaAgregada] = useState(""); */
+  const [arrTareas, setArrTareas] = useState([]);
 
-const [tarea, setTarea] = useState("");
-const [tareaAgregada, setTareaAgregada] = useState("");
-const [arrTareas, setArrTareas] = useState (["hh"]);
+  const inputTask = (value) => {
+    setTarea(value);
+  };
 
-const inputTask = (value)=>{
-  setTarea(value);
-};
+  const addTask = (value) => {
+    setArrTareas([...arrTareas, 
+      { id: Date.now(),
+        value: value
+      }]);
+  };
 
-const addTask = (value)=>{
-  setTareaAgregada(value);
-  setArrTareas([...arrTareas, value]);
-  console.warn(arrTareas)
+  const funcionDelete = (id) => {
+    console.warn("borre la tarea")
 }
-
-/* useEffect(() => {
-
-}, []) */
-
 
   return (
     <>
-    {/* INPUT + BTN ADD */}
+      {/* INPUT + BTN ADD */}
       <View style={styles.container}>
         <View style={styles.inputContainer}>
-          <TextInput 
-          style={styles.input}
-          placeholder='New task' 
-          placeholderTextColor={'#0471A6'}
-          onChangeText={inputTask}
+          <TextInput
+            style={styles.input}
+            placeholder="New task"
+            placeholderTextColor={"#0471A6"}
+            onChangeText={inputTask}
           />
-          <BotonAdd 
+          <BotonAdd
             title={"ADD"}
-            onPress={()=>{addTask(tarea)}}
+            onPress={() => {
+              addTask(tarea);
+            }}
             color={"#0471A6"}
-            />
-        </View>
-
-    {/* LISTADO DE TAREAS */}
-        <TareaDlt
-          arrTareas = {arrTareas}
           />
+        </View>
+        {/* LISTADO DE TAREAS */}
+        {console.warn(arrTareas)}
+            <FlatList
+            data={arrTareas}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({item, index})=>
+            <TareaDeleteContainer 
+              item={item}
+              setArrTareas={setArrTareas}
+              fn={funcionDelete}
+            />}
+            />
       </View>
     </>
   );
 }
-
