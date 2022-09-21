@@ -1,96 +1,59 @@
-import { StyleSheet, View, TextInput, Text, FlatList } from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import { useState } from "react";
-import BotonAdd from "./components/Botones/BotonAdd";
 import TareaDeleteContainer from "./components/Botones/BotonesContainer/TareaDeleteContainer";
+import TareaAddContainer from "./components/Botones/BotonesContainer/TareaAddContainer";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-  },
-
-  inputContainer: {
-    marginTop: 50,
-    marginBottom: 20,
-    marginHorizontal: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
-  input: {
-    width: "75%",
-    color: "#0471A6",
-    borderBottomColor: "#0471A6",
-    borderBottomWidth: 1,
-    height: 45,
-    marginBottom: 5,
-  },
-
-  containerTask: {
-    marginBottom: 20,
-    marginHorizontal: 20,
-  },
-
-  textTask: {
-    backgroundColor: "white",
-    marginTop: 0,
-    marginVertical: 10,
-    justifyContent: "space-between",
-    width: "100%",
-  },
+  }
 });
 
 export default function App() {
   const [tarea, setTarea] = useState("");
-  /* const [tareaAgregada, setTareaAgregada] = useState(""); */
   const [arrTareas, setArrTareas] = useState([]);
 
+  /* Funcion para capturar el texto del input y setearlo en la TAREA */
   const inputTask = (value) => {
     setTarea(value);
   };
 
+  /* Funcion para agregar tarea, agarra TAREA y setea el ARRTAREAS con esa tarea y un ID en forma de OBJ */
   const addTask = (value) => {
-    setArrTareas([...arrTareas, 
-      { id: Date.now(),
-        value: value
-      }]);
+    setArrTareas([...arrTareas, { id: Date.now(), value: value }]);
   };
 
+  /* Funcion para borrar la tarea, se le pasa un ID de la tarea, filtra en el ARRTAREAS para sacarlo y lo setea nuevamente sin ese OBJ */
   const funcionDelete = (id) => {
-    console.warn("borre la tarea")
-}
+    setArrTareas(arrTareas.filter((item) => item.id !== id));
+  };
 
   return (
     <>
-      {/* INPUT + BTN ADD */}
+      
       <View style={styles.container}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="New task"
-            placeholderTextColor={"#0471A6"}
-            onChangeText={inputTask}
-          />
-          <BotonAdd
-            title={"ADD"}
-            onPress={() => {
-              addTask(tarea);
-            }}
-            color={"#0471A6"}
-          />
-        </View>
+
+        {/* INPUT TAREA + BTN ADD */}
+        <TareaAddContainer
+          addTask={addTask}
+          inputTask={inputTask}
+          tareaAgregada={tarea}
+        />
+
         {/* LISTADO DE TAREAS */}
-        {console.warn(arrTareas)}
-            <FlatList
-            data={arrTareas}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({item, index})=>
-            <TareaDeleteContainer 
+        {/* Se utiliza el FLATLIST PARA RENDERIZAR TODOS LOS ELEMENTOS ITERABLES FUNCIONA COMO MAP */}
+        <FlatList
+          data={arrTareas}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item, index }) => (
+            <TareaDeleteContainer
               item={item}
               setArrTareas={setArrTareas}
-              fn={funcionDelete}
-            />}
+              funcionDelete={funcionDelete}
             />
+          )}
+        />
       </View>
     </>
   );
