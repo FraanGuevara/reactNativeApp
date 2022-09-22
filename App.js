@@ -2,6 +2,7 @@ import { StyleSheet, View, FlatList } from "react-native";
 import { useState } from "react";
 import TareaDeleteContainer from "./components/Botones/BotonesContainer/TareaDeleteContainer";
 import TareaAddContainer from "./components/Botones/BotonesContainer/TareaAddContainer";
+import ModalDeleteTask from "./components/Modal/ModalDeleteTask";
 
 const styles = StyleSheet.create({
   container: {
@@ -13,6 +14,8 @@ const styles = StyleSheet.create({
 export default function App() {
   const [tarea, setTarea] = useState("");
   const [arrTareas, setArrTareas] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [itemTask, setItemTask] = useState({});
 
   /* Funcion para capturar el texto del input y setearlo en la TAREA */
   const inputTask = (value) => {
@@ -28,6 +31,10 @@ export default function App() {
   const funcionDelete = (id) => {
     setArrTareas(arrTareas.filter((item) => item.id !== id));
   };
+
+  const handleModalOn = ()=>{
+    setIsModalOpen(true);
+  }
 
   return (
     <>
@@ -50,9 +57,17 @@ export default function App() {
             <TareaDeleteContainer
               item={item}
               setArrTareas={setArrTareas}
-              funcionDelete={funcionDelete}
+              setItemTask={setItemTask}
+              handleModalOn={handleModalOn}
             />
           )}
+        />
+        
+        <ModalDeleteTask
+          itemTask={itemTask}
+          funcionDelete={funcionDelete}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
         />
       </View>
     </>

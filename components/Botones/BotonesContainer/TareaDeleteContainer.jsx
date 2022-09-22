@@ -2,7 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import TareaDelete from '../TareaDelete'
 
-export default function TareaDeleteContainer({ item, funcionDelete }) {
+export default function TareaDeleteContainer({ item, funcionDelete, setItemTask, handleModalOn }) {
 
     
 
@@ -13,7 +13,9 @@ export default function TareaDeleteContainer({ item, funcionDelete }) {
                     titleBtn={"Delete"}
                     color={"red"}
                     id={item.id}
+                    handleModalOn={handleModalOn}
                     funcionDelete={funcionDelete}
+                    setItemTask={setItemTask}
                 />
             </View>
     )

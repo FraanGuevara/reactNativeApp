@@ -1,7 +1,7 @@
 import { Text, StyleSheet, View } from "react-native";
 import BotonAdd from "./BotonAdd";
 
-function TareaDelete({ tarea, titleBtn, color, id, funcionDelete }) {
+function TareaDelete({ tarea, titleBtn, color, id, funcionDelete, handleModalOn, setItemTask }) {
   const styles = StyleSheet.create({
     cuerpoTask: {
       flex: 1,
@@ -25,7 +25,16 @@ function TareaDelete({ tarea, titleBtn, color, id, funcionDelete }) {
       <Text style={styles.textTask}>{tarea}</Text>
       <BotonAdd
         title={titleBtn}
-        onPress={() => funcionDelete(id)}
+        onPress={() => {
+          /* funcionDelete(id) */
+          handleModalOn();
+          setItemTask({
+            id: id,
+            value: tarea
+          }); 
+        }
+          
+        }
         color={color}
       />
     </View>
